@@ -60,8 +60,8 @@ class Disease(mesa.Model):  #defines a class called "Disease" that inherits from
                 self.grid.place_agent(agent, (x,y)) #places the agent in the grid
                 self.schedule.add(agent)    #adds the agent to the scheduler
 
-        self.susceptible = self.schedule.get_agent_count()-1    #sets the count of susceptible agents equal to the total count minus 1
-        self.infected = 1   #sets the count of infected agents equal to 1
+        self.susceptible = self.schedule.get_agent_count()-i_0    #sets the count of susceptible agents equal to the total count minus the starting infected amount
+        self.infected = i_0   #sets the count of infected agents equal to the starting number of infected agents
         self.recovered = 0  #sets the count of recovered agents equal to 0
         self.datacollector = mesa.DataCollector(
             {"susceptible": "susceptible", "infected": "infected", "recovered": "recovered"},
