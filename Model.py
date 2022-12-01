@@ -16,19 +16,25 @@ class DiseaseAgent(mesa.Agent): #defines a class called "DiseaseAgent" that inhe
                     
             for i in range(infected_neighbors): #for every infected neighbor it will run this block
                 if self.random.random() <= self.model.beta: #generates a random number and checks if it is less than "beta" (chance of being infected)
-                    self.type = 1   #sets the agent to be infected
+                    self.type = 3   #sets the agent to be a temporary type which will be changed to infected
                     self.model.susceptible -= 1     #removes 1 from the count of susceptible agents
                     self.model.infected += 1    #adds 1 to the count of infected agents
                     break   #stops running the for loop
                     
         elif self.type == 1:    #this block happens if the agent is currently infected
             if self.random.random() <= self.model.gamma:    #generates a random number and checks if it is less than "gamma" (chance of recovering)
-                self.type = 2   #sets the agent to be recovered
+                self.type = 4   #sets the agent to be a temporary type which will be changed to recovered
                 self.model.infected -= 1    #removes 1 from the count of infected agents
                 self.model.recovered += 1   #adds 1 to the count of recovered agents
 
         else:   #this block happens if the agent is currently recovered
             ()  #does nothing
+            
+    def advance(self):  #defines what happens to each agent at each step once the step is complete
+        if self.type == 3:  #this block happens if the agent is currently of the temporary infected type
+            self.type = 1   #converts the agent to be infected
+        elif self.type == 4:    #this block happens if the agent is currently of the temporary recovered type
+            self.type = 2   #converts the agent to be recovered
 
 #        self.model.grid.move_to_empty(self)    #randomises the position of all agents in the grid
 
@@ -42,7 +48,7 @@ class Disease(mesa.Model):  #defines a class called "Disease" that inherits from
         self.beta = beta    #sets the chance of being infected
         self.gamma = gamma  #sets the chance of recovering
 
-        self.schedule = mesa.time.RandomActivation(self)    #activates every agent in a random order each time step
+        self.schedule = mesa.time.SimultaneousActivation(self)    #activates every agent in at once each time step
         self.grid = mesa.space.SingleGrid(width, height, torus=False)   #creates a width*height sized grid (that does not wrap around)
 
         count = 0   #sets up a counter for how many agents have been placed
