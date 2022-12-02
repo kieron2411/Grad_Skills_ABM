@@ -6,4 +6,3 @@ Please note, you need to install the Python module Mesa to be able to run this c
 TO DO:
 - Randomise the starting position of the infected agents
 - Have the agents move around the grid
-- Try to find a way to stop the infection spreading more than one agent away
