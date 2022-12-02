@@ -20,14 +20,14 @@ class DiseaseAgent(mesa.Agent): #defines a class called "DiseaseAgent" that inhe
                     
             for i in range(infected_neighbors): #for every infected neighbor it will run this block
                 if self.random.random() <= self.model.beta: #generates a random number and checks if it is less than "beta" (chance of being infected)
-                    self.type = 3   #sets the agent to be infected
+                    self.type = 3   #sets the agent to be a temporary type which will be changed to infected
                     self.model.susceptible -= 1     #removes 1 from the count of susceptible agents
                     self.model.infected += 1    #adds 1 to the count of infected agents
                     break   #stops running the for loop
                     
         elif self.type == 1:    #this block happens if the agent is currently infected
             if self.random.random() <= self.model.gamma:    #generates a random number and checks if it is less than "gamma" (chance of recovering)
-                self.type = 4   #sets the agent to be recovered
+                self.type = 4   #sets the agent to be a temporary type which will be changed to recovered
                 self.model.infected -= 1    #removes 1 from the count of infected agents
                 self.model.recovered += 1   #adds 1 to the count of recovered agents
 
@@ -52,7 +52,7 @@ class Disease(mesa.Model):  #defines a class called "Disease" that inherits from
         self.beta = beta    #sets the chance of being infected
         self.gamma = gamma  #sets the chance of recovering
 
-        self.schedule = mesa.time.SimultaneousActivation(self)    #activates every agent in a random order each time step
+        self.schedule = mesa.time.SimultaneousActivation(self)    #activates every agent at once each time step
         self.grid = mesa.space.SingleGrid(width, height, torus=False)   #creates a width*height sized grid (that does not wrap around)
 
         xi_0 = random.sample(range(0, height), i_0) #generates a random list of i_0 amount of x coordinates
@@ -78,8 +78,8 @@ class Disease(mesa.Model):  #defines a class called "Disease" that inherits from
                 self.grid.place_agent(agent, (x,y)) #places the agent in the grid
                 self.schedule.add(agent)    #adds the agent to the scheduler            
 
-        self.susceptible = self.schedule.get_agent_count()-i_0    #sets the count of susceptible agents equal to the total count minus 1
-        self.infected = i_0   #sets the count of infected agents equal to the s
+        self.susceptible = self.schedule.get_agent_count()-i_0    #sets the count of susceptible agents equal to the total count minus the starting number of infected
+        self.infected = i_0   #sets the count of infected agents equal to the starting number of infected agents
         self.recovered = 0  #sets the count of recovered agents equal to 0
         self.datacollector = mesa.DataCollector(
             {"susceptible": "susceptible", "infected": "infected", "recovered": "recovered"},
