@@ -1,3 +1,5 @@
+#Credit goes to Project Mesa whose code this is based off of: https://github.com/projectmesa/mesa-examples/tree/main/examples/Schelling
+
 import mesa     #imports the mesa module
 
 from Model import Disease   #imports the item "Disease" from Model.py
