@@ -1,8 +1,7 @@
+#Credit goes to Project Mesa whose code this is based off of: https://github.com/projectmesa/mesa-examples/tree/main/examples/Schelling
+
 import mesa     #imports the "mesa" module. This module is used for Agent Based Modelling
 import random
-
-#inspiration taken from the below GitHub repository
-#https://github.com/projectmesa/mesa/tree/main/examples/schelling
 
 class DiseaseAgent(mesa.Agent): #defines a class called "DiseaseAgent" that inherits from the Agent class from the mesa module
 
