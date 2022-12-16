@@ -4,5 +4,5 @@ Agent based model for simulating the spread of disease through a population for 
 Please note, you need to install the Python module Mesa to be able to run this code.
 
 TO DO:
-- Randomise the starting position of the infected agents
 - Have the agents move around the grid
+- Add more types of agents to complexify the model
