@@ -10,10 +10,18 @@ class DiseaseAgent(mesa.Agent): #defines a class called "DiseaseAgent" that inhe
         self.pos = pos  #sets up the position of the agent
         self.type = agent_type  #susceptible = 0, infected = 1, recovered = 2
 
+    def move(self): #defines how the agents move
+        x, y = self.pos #sets "x" and "y" equal to the x and y coordinates of the agent
+        new_position = (x+random.randint(-1,1), y+random.randint(-1,1)) #sets the new coordinates equal to the current ones +- 1
+        try:    #trys running the following line
+            self.model.grid.move_agent(self, new_position)  #moves the agent to the new position
+        except: #runs this if the previous line results in an error (will happen if there is already an agent in the new location
+            self.model.grid.move_agent(self, (x,y)) #keeps the agent in its current position
+
     def step(self): #defines what happens to each agent at each step
         if self.type == 0:  #this block happens if the agent is currently susceptible
             infected_neighbors = 0  #sets up a counter for the infected neighbors
-            for neighbor in self.model.grid.iter_neighbors(self.pos, True): #counts how many neighbors are currently infected
+            for neighbor in self.model.grid.iter_neighbors(self.pos, False): #counts how many neighbors are currently infected
                 if neighbor.type == 1:
                     infected_neighbors += 1
                     
@@ -38,12 +46,11 @@ class DiseaseAgent(mesa.Agent): #defines a class called "DiseaseAgent" that inhe
             self.type = 1   #converts the agent to be infected
         elif self.type == 4:    #this block happens if the agent is currently of the temporary recovered type
             self.type = 2   #converts the agent to be recovered
-
-#        self.model.grid.move_to_empty(self)    #randomises the position of all agents in the grid
+        self.move() #moves the agents
 
 class Disease(mesa.Model):  #defines a class called "Disease" that inherits from the Model class from the mesa module
 
-    def __init__(self, width=20, height=20, density=0.8, i_0=1, beta=0.2, gamma=0.1):   #initialises the class with these variables (with default values)
+    def __init__(self, width=50, height=50, density=0.5, i_0=1, beta=0.2, gamma=0.1):   #initialises the class with these variables (with default values)
         self.width = width  #sets the grid's width 
         self.height = height    #sets the grid's height
         self.density = density  #sets the population density of the grid
